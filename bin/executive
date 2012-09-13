@@ -1,23 +1,23 @@
 #!/usr/bin/env ruby
 
 require "rubygems"
-require "boss"
+require "executive"
 
 command = ARGV.first.downcase
 
 case command
 when "start"
-  Boss.start
+  Executive.start
   Process.wait2
 
   trap "HUP" do
-    Boss.restart
+    Executive.restart
     Process.wait2
   end
 when "deploy"
-  Boss.deploy ARGV[1]
+  Executive.deploy ARGV[1]
 else
-  puts "Usage: boss <command> <args>"
+  puts "Usage: executive <command> <args>"
 end
 
 
