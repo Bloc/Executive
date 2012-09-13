@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+require "rubygems"
+require "boss"
+
+trap "HUP" do
+  Boss.restart
+  Process.wait2
+end
+
+Boss.start
+Process.wait2
