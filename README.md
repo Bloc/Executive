@@ -1,12 +1,12 @@
-# Boss
+# Executive
 
-TODO: Write a gem description
+Executive is a set of developer tasks for managing your development environment in a congruent way to how you manage your production application on Heroku.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'boss'
+    gem 'executive'
 
 And then execute:
 
@@ -14,16 +14,18 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install boss
+    $ gem install executive
 
 ## Usage
 
-TODO: Write usage instructions here
+Deploy production
 
-## Contributing
+	$ executive deploy production
+	
+Start your development application
 
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Added some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+	$ executive start
+
+Deploy to your running development application
+
+	$ executive deploy development
