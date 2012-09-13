@@ -3,10 +3,21 @@
 require "rubygems"
 require "boss"
 
-trap "HUP" do
-  Boss.restart
+command = ARGV.first.downcase
+
+case command
+when "start"
+  Boss.start
   Process.wait2
+
+  trap "HUP" do
+    Boss.restart
+    Process.wait2
+  end
+when "deploy"
+  Boss.deploy ARGV[1]
+else
+  puts "Usage: boss <command> <args>"
 end
 
-Boss.start
-Process.wait2
+

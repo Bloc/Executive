@@ -12,6 +12,14 @@ module Boss
       Process.kill "TERM", @foreman_pid
       start
     end
+
+    def deploy(environment)
+      if environment == "development"
+        Development.deploy
+      elsif environment == "production"
+        Production.deploy
+      end
+    end
   end
 
   module Development
@@ -37,14 +45,14 @@ module Boss
       puts ">> Deploying Development".green
       if migrations_present
         puts ">> Running Migrations".green
-        ensure_system_call("rake db:migrate")
+        ensure_system_call("foreman run rake db:migrate")
       else
         puts ">> Skipping Migrations".yellow
       end
 
       if seeds_changed
         puts ">> Updating DB Seeds".green
-        ensure_system_call("rake db:seed_fu")
+        ensure_system_call("foreman run rake db:seed_fu")
       else
         puts ">> Skipping DB Seeding".yellow
       end
@@ -53,7 +61,7 @@ module Boss
         puts ">> Restarting Foreman".green
 
         begin
-          foreman_pid = `ps aux | grep '[s]cript/start'`.split("\n").first.split(" ")[1]
+          foreman_pid = `ps aux | grep 'boss'`.split("\n").first.split(" ")[1]
           Process.kill "HUP", foreman_pid.to_i
         rescue NoMethodError => e
           puts "Foreman isn't running. Run script/start.".red
@@ -76,7 +84,6 @@ module Boss
     end
 
     def self.deploy
-      app = "bloc-workshop"
       remote = "heroku"
 
       puts              ">> Deploying Production".green
@@ -90,23 +97,20 @@ module Boss
 
       if migrations_present
         puts                ">> Turning On Maintenance Mode".green
-        ensure_system_call  "heroku maintenance:on --app #{app}"
+        ensure_system_call  "heroku maintenance:on"
       end
 
       puts                ">> Deploying to Heroku".green
       ensure_system_call  "git push #{remote} master"
 
       if migrations_present
-        ensure_system_call  "heroku run rake db:migrate --app #{app}"
+        ensure_system_call  "heroku run rake db:migrate"
       end
 
       if migrations_present
         puts                ">> Turning Off Maintenance Mode".green
-        ensure_system_call  "heroku maintenance:off --app #{app}"
+        ensure_system_call  "heroku maintenance:off"
       end
-
-      # Notify Airbrake
-      system("rake airbrake:deploy TO=production")
     end
   end
 end
