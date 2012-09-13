@@ -1,7 +1,7 @@
-require "boss/version"
+require "executive/version"
 require 'colorize'
 
-module Boss
+module Executive
   class << self
     def start
       @foreman_pid = Process.spawn("foreman start")
@@ -61,7 +61,7 @@ module Boss
         puts ">> Restarting Foreman".green
 
         begin
-          foreman_pid = `ps aux | grep 'boss'`.split("\n").first.split(" ")[1]
+          foreman_pid = `ps aux | grep 'executive'`.split("\n").first.split(" ")[1]
           Process.kill "HUP", foreman_pid.to_i
         rescue NoMethodError => e
           puts "Foreman isn't running. Run script/start.".red
