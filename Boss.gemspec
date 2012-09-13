@@ -4,9 +4,9 @@ require File.expand_path('../lib/boss/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Roshan Choxi"]
   gem.email         = ["roshan.choxi@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
-  gem.homepage      = ""
+  gem.description   = %q{a Foreman wrapper with extra utilities.}
+  gem.summary       = %q{Boss allows you to restart Foreman processes and deploy using Heroku conventions.}
+  gem.homepage      = "http://roshfu.com"
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
