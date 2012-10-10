@@ -20,6 +20,22 @@ module Executive
         Production.deploy
       end
     end
+
+    def bootstrap_data
+      config = YAML.load_file(File.join("config", "database.yml"))["development"]
+
+      old_backup =  `heroku pgbackups | grep HEROKU_POSTGRESQL_RED | cut -d "|" -f 1 | head -n 1`
+      puts "Destroying Old Backup: #{old_backup}".green
+      `heroku pgbackups:destroy #{old_backup}`
+      puts "Capturing New Backup...".green
+      `heroku pgbackups:capture`
+
+      backup_url = `heroku pgbackups:url`.strip
+      `curl "#{backup_url}" > temporary_backup.dump`
+      puts "Restoring Backup to #{config["database"]}".green
+      `pg_restore --verbose --clean --no-acl --no-owner -h #{config["host"]} -U #{config["username"]} -d #{config["database"]} temporary_backup.dump`
+      `rm temporary_backup.dump`
+    end
   end
 
   module Development

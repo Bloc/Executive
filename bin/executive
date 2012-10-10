@@ -16,6 +16,8 @@ when "start"
   end
 when "deploy"
   Executive.deploy ARGV[1]
+when "bootstrap"
+  Executive.bootstrap_data
 else
   puts "Usage: executive <command> <args>"
 end
