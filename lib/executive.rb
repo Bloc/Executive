@@ -6,7 +6,7 @@ module Executive
     def start
       @foreman_pid = Process.spawn("foreman start")
     end
-    
+
     def restart
       puts "\tRestarting Foreman".blue
       Process.kill "TERM", @foreman_pid
@@ -32,8 +32,17 @@ module Executive
 
       backup_url = `heroku pgbackups:url`.strip
       `curl "#{backup_url}" > temporary_backup.dump`
+      puts "Dropping Development Database..."
+
+      if `psql -l` =~ /#{config["database"]}/ && !system("dropdb #{config["database"]}")
+        puts "Please close all database connections and try again".red
+        exit
+      end
+
+      system("createdb #{config["database"]}")
+
       puts "Restoring Backup to #{config["database"]}".green
-      `pg_restore --verbose --clean --no-acl --no-owner -h #{config["host"]} -U #{config["username"]} -d #{config["database"]} temporary_backup.dump`
+      `pg_restore --no-acl --no-owner -c -h #{config["host"]} -U #{config["username"]} -d #{config["database"]} temporary_backup.dump`
       `rm temporary_backup.dump`
     end
   end
