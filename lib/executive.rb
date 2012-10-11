@@ -24,7 +24,7 @@ module Executive
     def bootstrap_data
       config = YAML.load_file(File.join("config", "database.yml"))["development"]
 
-      old_backup =  `heroku pgbackups | grep HEROKU_POSTGRESQL | cut -d "|" -f 1 | head -n 1`
+      old_backup =  `heroku pgbackups | grep HEROKU_POSTGRESQL | cut -d " " -f 1 | head -n 1`
       puts "Destroying Old Backup: #{old_backup}".green
       `heroku pgbackups:destroy #{old_backup}`
       puts "Capturing New Backup...".green
