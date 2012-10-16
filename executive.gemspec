@@ -18,4 +18,5 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency "colorize"
   gem.add_runtime_dependency "foreman"
   gem.add_runtime_dependency "heroku", ">= 2.32"
+  gem.add_runtime_dependency "yaml"
 end
