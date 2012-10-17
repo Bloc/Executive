@@ -1,5 +1,6 @@
 require "executive/version"
 require 'colorize'
+require 'yaml'
 
 module Executive
   class << self
