@@ -121,18 +121,28 @@ module Executive
 
       migrations_present = (`git log heroku/master..HEAD -- db/migrate/` != "")
 
-      puts                ">> Turning On Maintenance Mode".green
-      ensure_system_call  "heroku maintenance:on"
+      if migrations_present
+        # turn off preboot
+        puts                ">> Turning off Preboot".green
+        ensure_system_call  "heroku labs:disable preboot"
+
+        # turn on maintenance
+        puts                ">> Turning On Maintenance Mode".green
+        ensure_system_call  "heroku maintenance:on"
+      end
 
       puts                ">> Deploying to Heroku".green
       ensure_system_call  "git push #{remote} master"
 
       if migrations_present
         ensure_system_call  "heroku run rake db:migrate"
-      end
 
-      puts                ">> Turning Off Maintenance Mode".green
-      ensure_system_call  "heroku maintenance:off"
+        puts                ">> Turning Off Maintenance Mode".green
+        ensure_system_call  "heroku maintenance:off"
+
+        puts                ">> Turning Preboot Back On".green
+        ensure_system_call  "heroku labs:enable preboot"
+      end
     end
   end
 end
