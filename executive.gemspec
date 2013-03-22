@@ -2,11 +2,10 @@
 require File.expand_path('../lib/executive/version', __FILE__)
 
 Gem::Specification.new do |gem|
-  gem.authors       = ["Roshan Choxi", "Dave Paola"]
-  gem.email         = ["roshan.choxi@gmail.com", "dpaola2@gmail.com"]
+  gem.authors       = ["Roshan Choxi", "Dave Paola", "Hani Sharabash"]
+  gem.email         = ["roshan.choxi@gmail.com", "dpaola2@gmail.com", "hanibash@gmail.com"]
   gem.description   = %q{a Foreman wrapper with extra utilities.}
   gem.summary       = %q{executive allows you to restart Foreman processes and deploy using Heroku conventions.}
-  gem.homepage      = "http://roshfu.com"
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
